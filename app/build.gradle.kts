@@ -7,23 +7,23 @@ android {
     namespace = "com.fx.femu"
     compileSdk = 37
 
-    externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/cpp/Android.mk")
-        }
-    }
-
     defaultConfig {
         applicationId = "com.fx.femu"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
+        versionCode = 100
         versionName = "1.00"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+            abiFilters.addAll(setOf("arm64-v8a", "x86_64"))
+        }
+    }
+
+    sourceSets {
+        getByName("main") {
+            jniLibs.directories += "src/main/jniLibs"
         }
     }
 
@@ -33,11 +33,16 @@ android {
                 enable = false
             }
         }
+        getByName("debug") {
+            versionNameSuffix = "-debug"
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         compose = true
         prefab = true
@@ -55,7 +60,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

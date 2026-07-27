@@ -13,4 +13,3 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/src/main/cpp/qemu-11.0.2.tar.xz
