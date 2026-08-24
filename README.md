@@ -9,8 +9,8 @@ This is the primary repository of **FEmulator** (FDevelop's Emulator), managed u
 The repository leverages a unified modern layout utilizing independent application modules linked to an isolated shared logical core:
 
 *   **`shared`** — The primary shared core module. Contains the cross-platform microarchitecture simulation logic, processor registers math, and unified Material 3 UI states.
-*   **`desktopApp`** — A standalone execution wrapper compiling an ultra-fast JVM desktop window for Windows 11, macOS, and Linux targets.
-*   **`androidApp`** — An isolated production mobile container leveraging Google's **AGP 9.3.1 New DSL** pipelines (`android.newDsl=true`).
+*   **`desktop`** — A standalone execution wrapper compiling an ultra-fast JVM desktop window for Windows 11, macOS, and Linux targets.
+*   **`android`** — An isolated production mobile container leveraging Google's **AGP 9.3.1 New DSL** pipelines (`android.newDsl=true`).
 
 ---
 
