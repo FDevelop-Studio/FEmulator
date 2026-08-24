@@ -1,0 +1,35 @@
+name: FEmulator
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build-and-test:
+    name: Compile and Verify Layouts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Source Code
+        uses: actions/checkout@v4
+      - name: Set up JDK 21 (Temurin Specification)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Setup Gradle Dependency Cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: Grant Execute Permission to Gradle Wrapper
+        run: chmod +x gradlew
+      - name: Compile Desktop App & Run Common Tests
+        run: ./gradlew :desktop:assembleDist :core:allTests --no-daemon
+      - name: Compile Android Application Package (Debug APK)
+        run: ./gradlew :android:assembleDebug --no-daemon
+      - name: Upload Compiled Execution Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: femulator-build-packages
+          path: |
+            desktop/build/distributions/
+            android/build/outputs/apk/debug/
