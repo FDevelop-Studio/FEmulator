@@ -20,11 +20,11 @@ dependencies {
 }
 
 android {
-    namespace = "com.fdevelop.emulator"
+    namespace = "org.fdevelop.emulator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.fdevelop.emulator"
+        applicationId = "org.fdevelop.emulator"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

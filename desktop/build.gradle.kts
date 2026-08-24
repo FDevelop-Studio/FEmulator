@@ -17,11 +17,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.fdevelop.emulator.MainKt"
+        mainClass = "org.fdevelop.emulator.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.fdevelop.emulator"
+            packageName = "org.fdevelop.emulator"
             packageVersion = "1.0.0"
         }
     }

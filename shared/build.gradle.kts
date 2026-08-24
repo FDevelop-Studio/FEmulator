@@ -11,7 +11,7 @@ kotlin {
     jvm()
 
     android {
-        namespace = "com.fdevelop.emulator.shared"
+        namespace = "org.fdevelop.emulator.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
