@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java Environment For Project
+      - name: Setup Java Environment
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -24,12 +24,12 @@ jobs:
       - name: Initialize CMake
         uses: lukka/get-cmake@latest
 
-      - name: Setup Android Studio Environment For Project
+      - name: Setup Android Studio Environment
         uses: android-actions/setup-android@v3
 
       - name: Build Release APK Binary Monolith
         run: |
-          chmod +x gradlew
+          chmod +x ./gradlew
           ./gradlew :android:assembleRelease
 
       - name: Publish Artifacts To GitHub Releases
