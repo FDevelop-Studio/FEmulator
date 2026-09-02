@@ -1,0 +1,37 @@
+name: FDevelop's Emulator CI
+
+on:
+  push:
+    branches: [ "dev", "main" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  validate-and-build:
+    name: Build (Ubuntu only)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java Environment For Project
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Initialize CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Setup Android Studio Environment For Project
+        uses: android-actions/setup-android@v3
+
+      - name: Mark Gradle Wrapper As Application To Build
+        run: |
+          chmod +x gradlew
+          ./gradlew :android:assembleDebug
+
+      - name: Check Formation-Style At .editorconfig
+        run: ./gradlew checkStyle

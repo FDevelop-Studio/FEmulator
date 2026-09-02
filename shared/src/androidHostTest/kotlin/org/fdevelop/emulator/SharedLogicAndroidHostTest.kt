@@ -3,7 +3,7 @@ package com.fdevelop.emulator
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SharedLogicAndroidHostTest {
+class haredLogicAndroidHostTest {
 
     @Test
     fun example() {

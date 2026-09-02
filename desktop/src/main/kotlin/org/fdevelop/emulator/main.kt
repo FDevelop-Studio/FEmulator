@@ -1,4 +1,4 @@
-package com.fdevelop.emulator
+package org.fdevelop.emulator
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
