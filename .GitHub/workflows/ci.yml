@@ -2,9 +2,9 @@ name: FDevelop's Emulator Build
 
 on:
   push:
-    branches: [ "dev", "main" ]
+    branches: [ 'dev', 'main' ]
   pull_request: 
-    branches: [ "dev", "main" ]
+    branches: [ 'dev', 'main' ]
 
 jobs:
   build:
@@ -18,4 +18,17 @@ jobs:
     - name: Setup JDK
       uses: actions/setup-java@4
       with:
-        distribution: 'temurin
+        distribution: 'temurin'
+        java_version: '17'
+      
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Setup Grant For Gradle Permissions
+      run: chmod +x gradlew
+
+    - name: Run Shared Tests
+      run: ./gradlew check
+
+    - name: Build (Debug)
+      run: ./gradlew assembleDebug
