@@ -15,11 +15,11 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
         androidResources {
             enable = true
+        }
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
         }
         withHostTest {
             isIncludeAndroidResources = true
@@ -45,11 +45,27 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.okio)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
+}
+
+tasks.register<Exec>("compileNativeCore") {
+    group = "build"
+    description = "Compiles monolithic jni.cpp core using native CMake engine"
+    workingDir = file("src/commonMain/cpp")
+    commandLine = if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+        listOf("cmd", "/c", "cmake . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release")
+    } else {
+        listOf("sh", "-c", "cmake . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release")
+    }
+}
+
+tasks.matching { it.name.contains("compileKotlin") }.configureEach {
+    dependsOn("compileNativeCore")
 }
 
 dependencies {

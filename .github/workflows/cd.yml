@@ -1,0 +1,42 @@
+name: FDevelop's Emulator CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-production:
+    name: Build & Release Android Package (Ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java Environment
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Initialize CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Setup Android Studio Environment
+        uses: android-actions/setup-android@v3
+
+      - name: Build Release APK Binary Monolith
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :android:assembleRelease
+
+      - name: Publish Artifacts To GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            android/build/outputs/apk/release/*.apk
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

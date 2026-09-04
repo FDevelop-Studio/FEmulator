@@ -1,0 +1,25 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*{Makefile,CMakeLists.txt,*.cmake,*.mak}]
+indent_style = tab
+indent_size = 8
+
+[{*.c,*.cpp,*.h,*.hpp,*.inc}]
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+[{*.kt,*.kts}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[{*.toml,*.xml,*.json,*.yml}]
+indent_style = space
+indent_size = 4
