@@ -31,3 +31,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with: 
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+        
+      - name: Mark Gradle As Executable File
+        run: chmod +x ./gradlew
+        
+      - name: Run Unit-Tests
+        run: ./gradlew test
