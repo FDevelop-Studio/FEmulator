@@ -37,3 +37,12 @@ jobs:
         
       - name: Run Unit-Tests
         run: ./gradlew test
+        
+      - name: Build Shared Module
+        run: ./gradlew :shared:assemble
+        
+      - name: Build Desktop Module
+        run: ./gradlew :desktop:assemble
+        
+      - name: Build Android Module
+        run: ./gradlew :android:assemble
