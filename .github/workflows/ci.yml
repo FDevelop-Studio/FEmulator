@@ -2,9 +2,9 @@ name: FDevelop's Emulator CI
 
 on:
   push:
-    branches: [ "dev", "main" ]
+    branches: [ 'dev', 'main' ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ 'dev', 'main' ]
 
 jobs:
   validate-and-build:
