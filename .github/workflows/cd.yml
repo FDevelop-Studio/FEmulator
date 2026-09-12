@@ -5,38 +5,76 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.configuration-cache=true"
+  CMAKE_BUILD_TYPE: "Release"
+  JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
+
 jobs:
   release-production:
-    name: Build & Release Android Package
+    name: Build, Sign & Release Monolith (Ubuntu)
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    timeout-minutes: 25
 
-      - name: Setup Java Environment
-        uses: actions/setup-java@v4
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Java Environment (Temurin 21 LTS)
+        uses: actions/setup-java@v4.2.2
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '21'
           cache: 'gradle'
 
-      - name: Initialize CMake
-        uses: lukka/get-cmake@latest
+      - name: Initialize CMake Engine
+        uses: lukka/get-cmake@v3.29.3
 
-      - name: Setup Android Studio Environment
-        uses: android-actions/setup-android@v3
+      - name: Setup Android Studio SDK Tools
+        uses: android-actions/setup-android@v3.2.1
 
-      - name: Build Release APK Binary Monolith
+      - name: Compile Cross-Platform Release Artifacts
         run: |
-          chmod +x ./gradlew
+          chmod +x gradlew
+          ./gradlew :desktop:packageReleaseDistribution
           ./gradlew :android:assembleRelease
 
-      - name: Publish Artifacts To GitHub Releases
-        uses: softprops/action-gh-release@v2
+      - name: Pack Production Artifacts to ZIP
+        run: |
+          mkdir -p release-staging
+          cp desktop/build/compose/binaries/main/exe/*.exe release-staging/FEmulator.exe
+          cp android/build/outputs/apk/release/*.apk release-staging/android-release.apk
+          cd release-staging && zip -r ../release-artifacts.zip .
+
+      - name: Automated SignPath Code Signing Request
+        uses: signpath/github-action-submit-signing-request@v1.1.0
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: 'FDevelop-Studio'
+          project-slug: 'fdevelop-emulator'
+          signing-policy-slug: 'Test-Signing'
+          artifact-path: 'release-artifacts.zip'
+          output-path: 'signed-release/'
+          wait-for-completion: true
+
+      - name: Unpack Signed Artifacts for Publishing
+        run: |
+          unzip signed-release/release-artifacts.zip -d production-ready/
+
+      - name: Satellite Publish To GitHub Releases
+        uses: softprops/action-gh-release@v2.0.6
         with:
           files: |
-            android/build/outputs/apk/release/*.apk
+            production-ready/FEmulator.exe
+            production-ready/android-release.apk
           prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
