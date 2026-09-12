@@ -7,7 +7,7 @@ on:
 
 jobs:
   release-production:
-    name: Build & Release Android Package (Ubuntu)
+    name: Build & Release Android Package
     runs-on: ubuntu-latest
 
     steps:
