@@ -15,12 +15,17 @@ add_library(femulator SHARED
 target_include_directories(femulator PRIVATE
     ${JNI_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/qemu/qemu-11.1.0/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/qemu/qemu-11.1.0
 )
 
 target_link_libraries(femulator PRIVATE qemu)
 
 if(WIN32)
     target_link_libraries(femulator PRIVATE WinHvPlatform user32 gdi32 ws2_32)
+endif()
+
+if(ANDROID)
+    target_link_libraries(femulator PRIVATE log)
 endif()
 
 target_compile_options(femulator PRIVATE -Os)

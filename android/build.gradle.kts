@@ -12,6 +12,7 @@ kotlin {
 }
 dependencies {
     implementation(project(":shared"))
+    implementation(files("D:\\Users\\ilabe\\Downloads\\SDL3-3.4.16.aar"))
 
     implementation(libs.androidx.activity.compose)
 
